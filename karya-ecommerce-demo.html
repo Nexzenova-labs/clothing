@@ -1,0 +1,1698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Karya Clothing — Client Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+/* ============================================================
+   KARYA CLOTHING — ECOMMERCE DEMO
+   Client Presentation · All pages included
+   ============================================================ */
+
+:root {
+  --blush:      #F7ECE8;
+  --rose:       #C4647A;
+  --deep-rose:  #9E3D55;
+  --light-rose: #F4D4DC;
+  --peach:      #F0C4B0;
+  --cream:      #FDF8F5;
+  --text:       #2C1810;
+  --text-mid:   #7A5055;
+  --text-light: #B09898;
+  --border:     rgba(196,100,122,0.15);
+  --border-dark:rgba(196,100,122,0.3);
+  --serif:      'Cormorant Garamond', Georgia, serif;
+  --sans:       'Jost', 'Segoe UI', sans-serif;
+  --success:    #2D7A4A;
+  --warning:    #A06010;
+  --danger:     #9E3D3D;
+  --admin-bg:   #1E1410;
+  --admin-sidebar: #261A14;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--cream); color: var(--text); font-size: 14px; line-height: 1.6; }
+a { text-decoration: none; color: inherit; }
+button { font-family: var(--sans); cursor: pointer; }
+input, select, textarea { font-family: var(--sans); }
+
+/* ============================================================
+   DEMO NAVIGATION BAR (presentation controls)
+   ============================================================ */
+.demo-bar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+  background: #1E1410;
+  padding: 8px 16px;
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+}
+.demo-logo {
+  font-family: var(--serif); font-size: 14px; color: white;
+  letter-spacing: 0.12em; margin-right: 8px; opacity: 0.9;
+}
+.demo-label {
+  font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(255,255,255,0.35); margin-right: 2px;
+}
+.demo-sep { color: rgba(255,255,255,0.15); font-size: 16px; margin: 0 4px; }
+.demo-btn {
+  padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 500;
+  border: 1px solid rgba(255,255,255,0.15); background: transparent;
+  color: rgba(255,255,255,0.6); cursor: pointer; transition: all 0.2s;
+  letter-spacing: 0.03em; white-space: nowrap;
+}
+.demo-btn:hover { background: rgba(255,255,255,0.08); color: white; border-color: rgba(255,255,255,0.3); }
+.demo-btn.active { background: var(--rose); border-color: var(--rose); color: white; }
+.demo-btn.admin-btn-nav { border-color: rgba(56,139,245,0.4); color: rgba(56,139,245,0.8); }
+.demo-btn.admin-btn-nav:hover { background: rgba(56,139,245,0.12); color: #5BA3F5; }
+.demo-btn.admin-btn-nav.active { background: #2563EB; border-color: #2563EB; color: white; }
+
+/* ============================================================
+   PAGE SYSTEM
+   ============================================================ */
+.page { display: none; padding-top: 50px; min-height: 100vh; }
+.page.active { display: block; }
+
+/* ============================================================
+   SITE NAVIGATION (customer-facing)
+   ============================================================ */
+.site-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 32px; background: white;
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 50px; z-index: 100;
+  box-shadow: 0 1px 8px rgba(44,24,16,0.05);
+}
+.nav-logo {
+  font-family: var(--serif); font-size: 24px; letter-spacing: 0.18em;
+  color: var(--text); font-weight: 500;
+}
+.nav-links { display: flex; gap: 28px; }
+.nav-link {
+  font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-mid); cursor: pointer; transition: color 0.2s;
+  font-weight: 500;
+}
+.nav-link:hover, .nav-link.active { color: var(--rose); }
+.nav-right { display: flex; align-items: center; gap: 18px; }
+.nav-icon { font-size: 17px; cursor: pointer; position: relative; }
+.cart-badge {
+  position: absolute; top: -7px; right: -7px;
+  background: var(--rose); color: white; font-size: 9px;
+  width: 16px; height: 16px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--sans); font-weight: 600;
+}
+
+/* ============================================================
+   SHARED COMPONENTS
+   ============================================================ */
+.btn-primary {
+  padding: 12px 28px; background: var(--rose); color: white;
+  border: none; border-radius: 2px; font-size: 11px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  font-weight: 600; transition: background 0.2s;
+}
+.btn-primary:hover { background: var(--deep-rose); }
+.btn-outline {
+  padding: 12px 28px; background: transparent; color: var(--text);
+  border: 1px solid var(--text); border-radius: 2px; font-size: 11px;
+  letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600;
+  transition: all 0.2s;
+}
+.btn-outline:hover { background: var(--text); color: white; }
+
+/* Product Card */
+.product-card {
+  background: white; border-radius: 3px; overflow: hidden;
+  cursor: pointer; transition: transform 0.25s, box-shadow 0.25s;
+  box-shadow: 0 1px 4px rgba(44,24,16,0.06);
+}
+.product-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(44,24,16,0.12);
+}
+.product-card:hover .quick-view-overlay { opacity: 1; }
+.product-img-wrap { position: relative; overflow: hidden; }
+.product-img {
+  width: 100%; display: flex; align-items: center; justify-content: center;
+  font-size: 72px; color: rgba(196,100,122,0.12);
+}
+.quick-view-overlay {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: rgba(44,24,16,0.82); color: white;
+  text-align: center; padding: 11px;
+  font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  opacity: 0; transition: opacity 0.2s; font-weight: 600;
+}
+.product-info { padding: 14px 16px; }
+.product-name { font-family: var(--serif); font-size: 16px; color: var(--text); margin-bottom: 4px; }
+.product-price { font-size: 12px; color: var(--text-mid); }
+.product-price .gbp { color: var(--rose); font-weight: 600; margin-right: 6px; font-size: 14px; }
+.wish-icon { position: absolute; top: 12px; right: 12px; font-size: 18px; cursor: pointer; }
+
+/* Color product images */
+.img-skyblue    { background: linear-gradient(150deg,#C4DFF0 0%,#D8EDF8 45%,#EBF5FA 80%,#F0F8FC 100%); }
+.img-cream      { background: linear-gradient(150deg,#EBE0D2 0%,#F3EBE0 45%,#F8F2EC 80%,#FCF7F3 100%); }
+.img-peach      { background: linear-gradient(150deg,#F5C4A4 0%,#F8D4B8 45%,#FAE4CC 80%,#FCEEE0 100%); }
+.img-pink       { background: linear-gradient(150deg,#F2B4C8 0%,#F6C8D8 45%,#FADCe8 80%,#FCF0F4 100%); }
+.img-sage       { background: linear-gradient(150deg,#BAD4C0 0%,#CAE0CC 45%,#D8ECD8 80%,#E8F4EC 100%); }
+.img-lavender   { background: linear-gradient(150deg,#C8C0DC 0%,#D4CCEA 45%,#E0D8F0 80%,#ECE8F8 100%); }
+.img-white-floral { background: linear-gradient(150deg,#F0EDE8 0%,#F6F3EE 45%,#FAF8F4 80%,#FDFCF8 100%); }
+.img-coral      { background: linear-gradient(150deg,#F5C0A8 0%,#F8CEB8 45%,#FADDCb 80%,#FCEEDE 100%); }
+
+/* Section */
+.section { padding: 56px 32px; }
+.section-eyebrow {
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--rose); text-align: center; margin-bottom: 8px; font-weight: 600;
+}
+.section-title {
+  font-family: var(--serif); font-size: 32px; text-align: center;
+  color: var(--text); font-weight: 400; margin-bottom: 6px;
+}
+.section-sub { font-size: 12px; text-align: center; color: var(--text-mid); letter-spacing: 0.06em; margin-bottom: 36px; }
+.products-grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 18px; }
+.products-grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+
+/* Status badges */
+.badge {
+  display: inline-block; padding: 3px 11px; border-radius: 20px;
+  font-size: 10px; letter-spacing: 0.06em; font-weight: 600;
+}
+.badge-processing { background: #FFF3CD; color: #856404; }
+.badge-shipped    { background: #D1F0F8; color: #0C5460; }
+.badge-delivered  { background: #D4EDDA; color: #155724; }
+.badge-pending    { background: #F8D7DA; color: #721C24; }
+.badge-draft      { background: #E9ECEF; color: #495057; }
+.badge-active     { background: #D4EDDA; color: #155724; }
+.badge-low        { background: #FFF3CD; color: #856404; }
+
+/* Toast notification */
+.toast {
+  position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+  background: var(--text); color: white;
+  padding: 12px 20px; border-radius: 3px;
+  font-size: 13px; font-weight: 500;
+  transform: translateY(80px); opacity: 0;
+  transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
+  display: flex; align-items: center; gap: 10px;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+
+/* ============================================================
+   PAGE 1: HOMEPAGE
+   ============================================================ */
+.hero {
+  background: linear-gradient(135deg, #F7ECE8 0%, #FDEEF4 45%, #EAE8F0 100%);
+  padding: 64px 32px;
+  display: flex; align-items: center; gap: 40px;
+  min-height: 380px; position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; right: -60px; top: -60px;
+  width: 360px; height: 360px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(244,180,196,0.22), transparent 70%);
+  pointer-events: none;
+}
+.hero::after {
+  content: ''; position: absolute; left: -30px; bottom: -30px;
+  width: 200px; height: 200px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(196,100,122,0.08), transparent 70%);
+  pointer-events: none;
+}
+.hero-text { flex: 1; position: relative; z-index: 1; }
+.hero-eyebrow { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--rose); margin-bottom: 14px; font-weight: 600; }
+.hero-title { font-family: var(--serif); font-size: 52px; line-height: 1.1; color: var(--text); margin-bottom: 16px; font-weight: 400; }
+.hero-title em { font-style: italic; color: var(--rose); }
+.hero-sub { font-size: 14px; color: var(--text-mid); margin-bottom: 28px; line-height: 1.7; max-width: 400px; }
+.hero-ctas { display: flex; gap: 12px; }
+.hero-visual {
+  width: 260px; height: 340px; flex-shrink: 0;
+  border-radius: 4px; overflow: hidden;
+  background: linear-gradient(160deg,#BED9EE 0%,#D0E7F5 35%,#E2F0F9 60%,#F0F8FC 80%,#F5EEF2 100%);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; z-index: 1;
+}
+.hero-flower { font-size: 120px; opacity: 0.14; color: #5A8FB0; }
+
+.benefits-bar { display: grid; grid-template-columns: repeat(4,1fr); background: #2C1810; }
+.benefit-item { padding: 22px 16px; text-align: center; border-right: 1px solid rgba(255,255,255,0.07); }
+.benefit-item:last-child { border-right: none; }
+.benefit-icon { font-size: 22px; margin-bottom: 8px; }
+.benefit-name { font-size: 10px; color: rgba(255,255,255,0.65); letter-spacing: 0.1em; text-transform: uppercase; line-height: 1.5; font-weight: 500; }
+
+.story-section { display: grid; grid-template-columns: 1fr 1fr; background: var(--blush); }
+.story-img {
+  min-height: 320px; display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(160deg,#E8C8C0 0%,#F0D8D0 50%,#F8ECE8 100%);
+  font-size: 100px; opacity: 0.25; color: var(--rose);
+}
+.story-content { padding: 52px 48px; display: flex; flex-direction: column; justify-content: center; }
+.story-eyebrow { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--rose); margin-bottom: 12px; font-weight: 600; }
+.story-title { font-family: var(--serif); font-size: 32px; color: var(--text); margin-bottom: 18px; line-height: 1.2; font-weight: 400; }
+.story-body { font-size: 13px; color: var(--text-mid); line-height: 1.9; margin-bottom: 24px; }
+.story-link { font-size: 12px; color: var(--rose); letter-spacing: 0.08em; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+
+.site-footer { background: #2C1810; padding: 48px 32px; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 32px; }
+.footer-brand-name { font-family: var(--serif); font-size: 24px; color: white; letter-spacing: 0.15em; margin-bottom: 12px; }
+.footer-tagline { font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.7; margin-bottom: 20px; }
+.footer-socials { display: flex; gap: 12px; }
+.social-btn { width: 32px; height: 32px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 13px; color: rgba(255,255,255,0.5); cursor: pointer; transition: all 0.2s; }
+.social-btn:hover { border-color: var(--rose); color: var(--rose); }
+.footer-col-title { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 16px; font-weight: 600; }
+.footer-link { font-size: 12px; color: rgba(255,255,255,0.35); display: block; margin-bottom: 10px; cursor: pointer; transition: color 0.2s; }
+.footer-link:hover { color: white; }
+.footer-bottom { background: #1A0F0A; padding: 14px 32px; display: flex; justify-content: space-between; align-items: center; }
+.footer-copy { font-size: 10px; color: rgba(255,255,255,0.25); letter-spacing: 0.06em; }
+.payment-icons { font-size: 11px; color: rgba(255,255,255,0.25); display: flex; gap: 8px; }
+
+/* ============================================================
+   PAGE 2: SHOP
+   ============================================================ */
+.shop-header { padding: 32px 32px 20px; border-bottom: 1px solid var(--border); background: white; }
+.breadcrumb { font-size: 11px; color: var(--text-light); margin-bottom: 10px; }
+.breadcrumb span { color: var(--rose); }
+.shop-header-title { font-family: var(--serif); font-size: 28px; color: var(--text); font-weight: 400; }
+.shop-layout { display: grid; grid-template-columns: 220px 1fr; }
+.shop-sidebar { padding: 28px 20px; border-right: 1px solid var(--border); background: white; min-height: 100vh; }
+.filter-group { margin-bottom: 28px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+.filter-group:last-child { border-bottom: none; }
+.filter-heading { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text); margin-bottom: 14px; font-weight: 600; }
+.filter-option { display: flex; align-items: center; gap: 9px; margin-bottom: 10px; cursor: pointer; }
+.filter-option input[type="checkbox"] { accent-color: var(--rose); width: 14px; height: 14px; }
+.filter-option label { font-size: 13px; color: var(--text-mid); cursor: pointer; }
+.filter-option label span { color: var(--text-light); font-size: 11px; }
+.color-grid { display: flex; gap: 8px; flex-wrap: wrap; }
+.color-swatch { width: 24px; height: 24px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; outline-offset: 2px; }
+.color-swatch.active { outline: 2px solid var(--rose); }
+.color-swatch:hover { transform: scale(1.1); }
+.size-grid { display: flex; gap: 8px; flex-wrap: wrap; }
+.size-chip { padding: 6px 12px; border: 1px solid var(--border); font-size: 12px; cursor: pointer; transition: all 0.2s; color: var(--text-mid); border-radius: 2px; }
+.size-chip:hover { border-color: var(--rose); color: var(--rose); }
+.size-chip.active { background: var(--rose); color: white; border-color: var(--rose); }
+.price-range { font-size: 12px; color: var(--text-mid); margin-bottom: 10px; }
+.price-range input { width: 100%; accent-color: var(--rose); margin-top: 6px; }
+
+.shop-main { padding: 24px 28px; }
+.shop-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+.results-info { font-size: 13px; color: var(--text-mid); }
+.sort-wrap { display: flex; align-items: center; gap: 10px; }
+.sort-label { font-size: 11px; color: var(--text-mid); }
+.sort-select { padding: 7px 12px; border: 1px solid var(--border); border-radius: 2px; font-size: 12px; color: var(--text); background: white; font-family: var(--sans); }
+.active-filters { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+.filter-pill { display: flex; align-items: center; gap: 6px; padding: 4px 12px; background: var(--light-rose); color: var(--deep-rose); border-radius: 20px; font-size: 11px; font-weight: 600; }
+.filter-pill span { cursor: pointer; font-size: 14px; }
+
+/* ============================================================
+   PAGE 3: PRODUCT DETAIL
+   ============================================================ */
+.pdp-wrap { display: grid; grid-template-columns: 1fr 1fr; }
+.pdp-gallery { padding: 32px; position: sticky; top: 110px; height: fit-content; }
+.pdp-main-img {
+  width: 100%; height: 420px; border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 120px; color: rgba(196,100,122,0.12); margin-bottom: 12px;
+  transition: all 0.3s;
+}
+.pdp-thumbs { display: flex; gap: 10px; }
+.pdp-thumb { width: 72px; height: 72px; border-radius: 3px; cursor: pointer; border: 2px solid transparent; transition: border-color 0.2s; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 28px; color: rgba(196,100,122,0.15); }
+.pdp-thumb.active { border-color: var(--rose); }
+.pdp-info { padding: 40px 32px 40px 0; }
+.pdp-category { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--rose); margin-bottom: 10px; font-weight: 600; }
+.pdp-name { font-family: var(--serif); font-size: 30px; color: var(--text); font-weight: 400; line-height: 1.2; margin-bottom: 14px; }
+.pdp-rating-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.stars { color: #D4A020; font-size: 14px; letter-spacing: 1px; }
+.rating-text { font-size: 12px; color: var(--text-mid); }
+.pdp-price { font-family: var(--serif); font-size: 26px; color: var(--text); margin-bottom: 4px; }
+.pdp-price-inr { font-size: 13px; color: var(--text-mid); margin-bottom: 24px; }
+.pdp-divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+.pdp-field-label { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text); margin-bottom: 12px; font-weight: 600; }
+.color-selected-name { font-weight: 300; text-transform: none; letter-spacing: 0; color: var(--text-mid); }
+.pdp-colors { display: flex; gap: 10px; margin-bottom: 22px; }
+.pdp-color { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; outline-offset: 3px; }
+.pdp-color:hover { transform: scale(1.08); }
+.pdp-color.active { outline: 2px solid var(--rose); }
+.pdp-sizes { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+.pdp-size { padding: 9px 16px; border: 1px solid var(--border); font-size: 12px; cursor: pointer; transition: all 0.2s; color: var(--text-mid); border-radius: 2px; font-weight: 500; }
+.pdp-size:hover { border-color: var(--rose); color: var(--rose); }
+.pdp-size.selected { background: var(--text); color: white; border-color: var(--text); }
+.pdp-size.oos { opacity: 0.3; cursor: not-allowed; text-decoration: line-through; }
+.pdp-qty-wrap { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+.qty-ctrl { display: flex; align-items: center; border: 1px solid var(--border); border-radius: 2px; }
+.qty-btn { width: 36px; height: 36px; background: none; border: none; font-size: 18px; color: var(--text); cursor: pointer; transition: background 0.2s; display: flex; align-items: center; justify-content: center; }
+.qty-btn:hover { background: var(--blush); }
+.qty-count { width: 40px; text-align: center; font-size: 14px; font-weight: 500; color: var(--text); border-left: 1px solid var(--border); border-right: 1px solid var(--border); line-height: 36px; }
+.pdp-actions { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.btn-addcart { padding: 15px; background: var(--text); color: white; border: none; border-radius: 2px; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; transition: background 0.2s; }
+.btn-addcart:hover { background: #4A2C20; }
+.btn-buynow { padding: 15px; background: transparent; color: var(--text); border: 1px solid var(--text); border-radius: 2px; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; transition: all 0.2s; }
+.btn-buynow:hover { background: var(--blush); }
+.pdp-utils { display: flex; gap: 20px; }
+.pdp-util-link { font-size: 12px; color: var(--text-mid); cursor: pointer; display: flex; align-items: center; gap: 6px; transition: color 0.2s; }
+.pdp-util-link:hover { color: var(--rose); }
+.pdp-stock-info { margin-top: 16px; padding: 12px 16px; background: #F0FAF4; border-radius: 2px; font-size: 12px; color: var(--success); display: flex; align-items: center; gap: 8px; }
+.pdp-tabs-section { border-top: 1px solid var(--border); margin: 0 32px; }
+.pdp-tab-btns { display: flex; border-bottom: 1px solid var(--border); }
+.pdp-tab-btn { padding: 14px 24px; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; color: var(--text-mid); border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.2s; font-weight: 600; background: none; border-top: none; border-left: none; border-right: none; }
+.pdp-tab-btn.active { color: var(--rose); border-bottom-color: var(--rose); }
+.pdp-tab-content { padding: 24px 0; font-size: 13px; color: var(--text-mid); line-height: 1.9; display: none; }
+.pdp-tab-content.active { display: block; }
+
+/* ============================================================
+   PAGE 4: CART
+   ============================================================ */
+.cart-page { padding: 40px 32px; }
+.cart-page-title { font-family: var(--serif); font-size: 30px; color: var(--text); font-weight: 400; margin-bottom: 28px; }
+.cart-layout { display: grid; grid-template-columns: 1fr 320px; gap: 28px; }
+.cart-items { }
+.cart-item-row { display: flex; gap: 18px; padding: 20px 0; border-bottom: 1px solid var(--border); }
+.cart-item-img { width: 90px; height: 110px; border-radius: 3px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 36px; color: rgba(196,100,122,0.2); }
+.cart-item-info { flex: 1; }
+.cart-item-name { font-family: var(--serif); font-size: 17px; color: var(--text); margin-bottom: 4px; }
+.cart-item-meta { font-size: 12px; color: var(--text-mid); margin-bottom: 12px; }
+.cart-item-qty { display: flex; align-items: center; gap: 0; }
+.cart-qty-btn { width: 30px; height: 30px; border: 1px solid var(--border); background: white; font-size: 16px; color: var(--text); cursor: pointer; transition: background 0.2s; display: flex; align-items: center; justify-content: center; }
+.cart-qty-btn:hover { background: var(--blush); }
+.cart-qty-num { width: 36px; height: 30px; text-align: center; line-height: 30px; font-size: 13px; font-weight: 500; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.cart-item-remove { font-size: 11px; color: var(--text-light); cursor: pointer; margin-top: 8px; display: inline-block; transition: color 0.2s; }
+.cart-item-remove:hover { color: var(--danger); }
+.cart-item-price { font-family: var(--serif); font-size: 18px; color: var(--text); align-self: flex-start; white-space: nowrap; }
+.promo-section { margin: 24px 0; }
+.promo-row { display: flex; gap: 8px; }
+.promo-input { flex: 1; padding: 11px 14px; border: 1px solid var(--border); border-radius: 2px; font-size: 13px; font-family: var(--sans); }
+.promo-input:focus { outline: none; border-color: var(--rose); }
+.promo-btn { padding: 11px 20px; background: var(--text); color: white; border: none; border-radius: 2px; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; }
+.promo-success { font-size: 12px; color: var(--success); margin-top: 8px; display: none; }
+.order-summary-box { background: var(--blush); padding: 28px; border-radius: 4px; height: fit-content; position: sticky; top: 110px; }
+.summary-title { font-family: var(--serif); font-size: 18px; color: var(--text); margin-bottom: 22px; }
+.summary-line { display: flex; justify-content: space-between; align-items: center; font-size: 13px; margin-bottom: 14px; }
+.summary-line .label { color: var(--text-mid); }
+.summary-line .value { color: var(--text); font-weight: 500; }
+.summary-line .value.green { color: var(--success); }
+.summary-line .value.red { color: var(--deep-rose); }
+.summary-divider { border: none; border-top: 1px solid rgba(196,100,122,0.2); margin: 16px 0; }
+.summary-total { font-family: var(--serif); font-size: 20px; color: var(--text); }
+.summary-tax-note { font-size: 11px; color: var(--text-mid); margin-top: 4px; margin-bottom: 20px; }
+.checkout-btn { width: 100%; padding: 15px; background: var(--rose); color: white; border: none; border-radius: 2px; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; transition: background 0.2s; margin-bottom: 14px; }
+.checkout-btn:hover { background: var(--deep-rose); }
+.secure-note { text-align: center; font-size: 11px; color: var(--text-mid); display: flex; align-items: center; justify-content: center; gap: 6px; }
+.payment-methods { margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(196,100,122,0.2); font-size: 11px; color: var(--text-mid); }
+.pm-label { margin-bottom: 8px; font-weight: 600; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; }
+.pm-icons { display: flex; gap: 6px; flex-wrap: wrap; }
+.pm-icon { padding: 4px 8px; background: white; border: 1px solid var(--border); border-radius: 2px; font-size: 10px; color: var(--text-mid); font-weight: 600; }
+
+/* ============================================================
+   PAGE 5: ADMIN DASHBOARD
+   ============================================================ */
+.admin-wrap { display: flex; min-height: calc(100vh - 50px); }
+.admin-sidebar {
+  width: 220px; flex-shrink: 0; background: var(--admin-sidebar);
+  display: flex; flex-direction: column;
+  position: sticky; top: 50px; height: calc(100vh - 50px); overflow-y: auto;
+}
+.admin-brand { padding: 22px 18px 18px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.admin-brand-name { font-family: var(--serif); font-size: 17px; color: white; letter-spacing: 0.12em; }
+.admin-brand-sub { font-size: 9px; color: rgba(255,255,255,0.3); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 2px; font-weight: 600; }
+.admin-nav-section { padding: 16px 0 0; }
+.admin-nav-label { font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.25); padding: 0 18px 8px; font-weight: 600; }
+.admin-nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 18px; font-size: 12px; color: rgba(255,255,255,0.5); cursor: pointer; transition: all 0.2s; border-left: 2px solid transparent; font-weight: 500; }
+.admin-nav-item:hover { color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.04); }
+.admin-nav-item.active { color: white; border-left-color: var(--rose); background: rgba(196,100,122,0.1); }
+.admin-nav-icon { font-size: 15px; width: 18px; text-align: center; }
+.admin-nav-badge { margin-left: auto; background: var(--rose); color: white; font-size: 9px; padding: 2px 7px; border-radius: 10px; font-weight: 700; }
+.admin-main { flex: 1; background: #F5F0EE; overflow-x: hidden; }
+.admin-topbar { display: flex; align-items: center; justify-content: space-between; padding: 16px 28px; background: white; border-bottom: 1px solid var(--border); position: sticky; top: 50px; z-index: 50; }
+.admin-page-title { font-family: var(--serif); font-size: 22px; color: var(--text); font-weight: 400; }
+.admin-topbar-actions { display: flex; gap: 8px; align-items: center; }
+.admin-btn { padding: 8px 18px; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 2px; font-weight: 600; font-family: var(--sans); transition: all 0.2s; }
+.admin-btn-primary { background: var(--rose); color: white; border: none; }
+.admin-btn-primary:hover { background: var(--deep-rose); }
+.admin-btn-secondary { background: white; color: var(--text); border: 1px solid var(--border); }
+.admin-btn-secondary:hover { background: var(--blush); }
+.admin-content { padding: 28px; }
+
+/* KPI cards */
+.kpi-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 24px; }
+.kpi-card { background: white; padding: 20px; border-radius: 3px; border: 1px solid var(--border); }
+.kpi-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-mid); margin-bottom: 10px; font-weight: 600; }
+.kpi-value { font-family: var(--serif); font-size: 28px; color: var(--text); margin-bottom: 6px; }
+.kpi-change { font-size: 11px; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+.kpi-change.up { color: var(--success); }
+.kpi-change.down { color: var(--danger); }
+
+/* Chart */
+.chart-card { background: white; border-radius: 3px; border: 1px solid var(--border); padding: 22px; margin-bottom: 22px; }
+.chart-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.chart-card-title { font-family: var(--serif); font-size: 17px; color: var(--text); }
+.chart-period-tabs { display: flex; gap: 4px; }
+.period-tab { padding: 5px 12px; font-size: 10px; border: 1px solid var(--border); border-radius: 2px; cursor: pointer; color: var(--text-mid); font-family: var(--sans); font-weight: 600; letter-spacing: 0.06em; background: white; }
+.period-tab.active { background: var(--rose); color: white; border-color: var(--rose); }
+.bar-chart-wrap { display: flex; align-items: flex-end; gap: 10px; height: 120px; padding-top: 10px; }
+.bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end; }
+.bar-item { width: 100%; border-radius: 2px 2px 0 0; background: linear-gradient(to top, var(--rose) 0%, #E8A0B0 100%); opacity: 0.85; transition: opacity 0.2s; }
+.bar-item:hover { opacity: 1; }
+.bar-day { font-size: 9px; color: var(--text-light); font-weight: 600; letter-spacing: 0.06em; }
+.bar-amount { font-size: 9px; color: var(--text-mid); }
+
+/* Tables */
+.data-card { background: white; border-radius: 3px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 22px; }
+.data-card-header { display: flex; justify-content: space-between; align-items: center; padding: 18px 22px; border-bottom: 1px solid var(--border); }
+.data-card-title { font-family: var(--serif); font-size: 17px; color: var(--text); }
+.data-card-link { font-size: 11px; color: var(--rose); cursor: pointer; font-weight: 600; }
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th { font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-mid); padding: 12px 22px; text-align: left; background: #FAF7F6; border-bottom: 1px solid var(--border); font-weight: 700; }
+.data-table td { font-size: 12px; color: var(--text); padding: 13px 22px; border-bottom: 1px solid var(--border); }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: #FAF7F6; }
+.table-product-img { width: 36px; height: 36px; border-radius: 2px; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; color: rgba(196,100,122,0.3); margin-right: 8px; vertical-align: middle; }
+.stock-bar-wrap { display: flex; align-items: center; gap: 8px; }
+.stock-bar { width: 60px; height: 5px; background: #EEE; border-radius: 3px; overflow: hidden; }
+.stock-fill { height: 100%; border-radius: 3px; }
+
+/* Two-column layout for dashboard */
+.dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.dash-grid-wide { grid-column: 1 / -1; }
+
+/* ============================================================
+   PAGE 6: ADMIN PRODUCTS LIST
+   ============================================================ */
+.product-table-filters { display: flex; gap: 10px; padding: 18px 22px; border-bottom: 1px solid var(--border); background: #FAF7F6; flex-wrap: wrap; align-items: center; }
+.filter-tab { padding: 6px 16px; border-radius: 20px; font-size: 11px; cursor: pointer; border: 1px solid var(--border); color: var(--text-mid); font-weight: 600; transition: all 0.2s; background: white; }
+.filter-tab.active { background: var(--rose); color: white; border-color: var(--rose); }
+.search-input { padding: 8px 14px; border: 1px solid var(--border); border-radius: 2px; font-size: 12px; font-family: var(--sans); min-width: 200px; }
+.search-input:focus { outline: none; border-color: var(--rose); }
+.filter-select { padding: 8px 12px; border: 1px solid var(--border); border-radius: 2px; font-size: 12px; font-family: var(--sans); color: var(--text); background: white; }
+.bulk-actions { margin-left: auto; display: flex; gap: 8px; }
+
+/* ============================================================
+   PAGE 7: ADD PRODUCT FORM
+   ============================================================ */
+.add-product-layout { display: grid; grid-template-columns: 1fr 300px; gap: 22px; padding: 28px; }
+.form-card { background: white; border-radius: 3px; border: 1px solid var(--border); padding: 24px; margin-bottom: 18px; }
+.form-card-title { font-family: var(--serif); font-size: 18px; color: var(--text); margin-bottom: 20px; font-weight: 400; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+.form-field { margin-bottom: 18px; }
+.form-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text); margin-bottom: 7px; display: block; font-weight: 600; }
+.form-label .required { color: var(--rose); }
+.form-input { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 2px; font-size: 13px; font-family: var(--sans); color: var(--text); transition: border-color 0.2s; }
+.form-input:focus { outline: none; border-color: var(--rose); }
+.form-input::placeholder { color: var(--text-light); }
+.form-textarea { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 2px; font-size: 13px; font-family: var(--sans); color: var(--text); resize: vertical; min-height: 100px; }
+.form-textarea:focus { outline: none; border-color: var(--rose); }
+.form-select { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 2px; font-size: 13px; font-family: var(--sans); color: var(--text); background: white; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237A5055' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; }
+.form-select:focus { outline: none; border-color: var(--rose); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-hint { font-size: 11px; color: var(--text-light); margin-top: 5px; }
+
+/* Image upload */
+.upload-area { border: 2px dashed var(--border-dark); border-radius: 3px; padding: 36px 20px; text-align: center; cursor: pointer; transition: all 0.2s; background: #FAF7F6; }
+.upload-area:hover { border-color: var(--rose); background: var(--blush); }
+.upload-icon { font-size: 32px; margin-bottom: 10px; }
+.upload-text { font-size: 13px; color: var(--text-mid); margin-bottom: 6px; }
+.upload-sub { font-size: 11px; color: var(--text-light); }
+.upload-btn { display: inline-block; margin-top: 12px; padding: 8px 20px; background: var(--rose); color: white; border-radius: 2px; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; }
+.uploaded-imgs { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+.uploaded-img { width: 72px; height: 72px; border-radius: 3px; border: 2px solid transparent; display: flex; align-items: center; justify-content: center; font-size: 24px; color: rgba(196,100,122,0.2); position: relative; }
+.uploaded-img.main { border-color: var(--rose); }
+.main-badge { position: absolute; bottom: -1px; left: 50%; transform: translateX(-50%); background: var(--rose); color: white; font-size: 8px; padding: 1px 6px; white-space: nowrap; font-weight: 700; }
+
+/* Variant builder */
+.variant-options { margin-bottom: 18px; }
+.variant-option-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.variant-tag { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; background: var(--light-rose); color: var(--deep-rose); border-radius: 20px; font-size: 12px; font-weight: 600; }
+.variant-tag span { cursor: pointer; opacity: 0.6; }
+.add-variant-row { display: flex; gap: 8px; }
+.variant-input { flex: 1; padding: 8px 12px; border: 1px solid var(--border); border-radius: 2px; font-size: 12px; font-family: var(--sans); }
+.variant-input:focus { outline: none; border-color: var(--rose); }
+.variant-add-btn { padding: 8px 16px; background: var(--text); color: white; border: none; border-radius: 2px; font-size: 11px; font-weight: 600; cursor: pointer; }
+
+/* Variant matrix table */
+.variant-matrix { width: 100%; border-collapse: collapse; margin-top: 14px; }
+.variant-matrix th { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-mid); padding: 10px 12px; text-align: left; background: #FAF7F6; border-bottom: 1px solid var(--border); font-weight: 700; }
+.variant-matrix td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+.variant-matrix tr:last-child td { border-bottom: none; }
+.variant-cell-input { width: 100%; padding: 6px 8px; border: 1px solid var(--border); border-radius: 2px; font-size: 12px; font-family: var(--sans); }
+.variant-cell-input:focus { outline: none; border-color: var(--rose); }
+.variant-color-dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; vertical-align: middle; margin-right: 6px; }
+
+/* Right sidebar cards */
+.sidebar-card { background: white; border-radius: 3px; border: 1px solid var(--border); padding: 20px; margin-bottom: 16px; }
+.sidebar-card-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 16px; letter-spacing: 0.04em; }
+.status-toggle { display: flex; gap: 6px; }
+.status-opt { flex: 1; padding: 9px; text-align: center; border: 1px solid var(--border); border-radius: 2px; font-size: 11px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+.status-opt.active { background: #D4EDDA; color: #155724; border-color: #AAD5B8; }
+.status-opt:not(.active):hover { background: var(--blush); }
+.channel-opt { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.channel-opt input { accent-color: var(--rose); }
+.channel-opt label { font-size: 13px; color: var(--text-mid); }
+.tag-wrap { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+.tag-item { padding: 4px 11px; background: var(--blush); color: var(--deep-rose); border-radius: 20px; font-size: 11px; font-weight: 600; display: flex; align-items: center; gap: 5px; }
+.tag-item span { cursor: pointer; opacity: 0.6; font-size: 14px; }
+.save-btn-row { display: flex; flex-direction: column; gap: 8px; }
+.save-btn { padding: 13px; border-radius: 2px; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; font-family: var(--sans); }
+.save-publish { background: var(--rose); color: white; border: none; }
+.save-publish:hover { background: var(--deep-rose); }
+.save-draft { background: white; color: var(--text); border: 1px solid var(--border); }
+.save-draft:hover { background: var(--blush); }
+.save-preview { background: var(--text); color: white; border: none; }
+.save-preview:hover { background: #4A2C20; }
+.progress-bar { height: 5px; background: #EEE; border-radius: 3px; overflow: hidden; margin-bottom: 6px; }
+.progress-fill { height: 100%; background: linear-gradient(to right, var(--rose), #E8A0B0); border-radius: 3px; }
+.form-complete-pct { font-size: 11px; color: var(--text-mid); }
+
+/* Toast */
+.toast { position: fixed; bottom: 24px; right: 24px; z-index: 9999; background: var(--text); color: white; padding: 13px 22px; border-radius: 3px; font-size: 13px; font-weight: 600; transform: translateY(80px); opacity: 0; transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1); display: flex; align-items: center; gap: 10px; }
+.toast.show { transform: translateY(0); opacity: 1; }
+
+/* ============================================================
+   RESPONSIVE (tablet-ish for demo viewing)
+   ============================================================ */
+@media (max-width: 900px) {
+  .products-grid-4 { grid-template-columns: repeat(2,1fr); }
+  .products-grid-3 { grid-template-columns: repeat(2,1fr); }
+  .kpi-row { grid-template-columns: repeat(2,1fr); }
+  .site-footer { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     DEMO NAVIGATION BAR
+     ============================================================ -->
+<div class="demo-bar">
+  <div class="demo-logo">KARYA</div>
+  <span class="demo-label">Customer</span>
+  <button class="demo-btn active" onclick="showPage('home',this)">🏠 Homepage</button>
+  <button class="demo-btn" onclick="showPage('shop',this)">🗂️ Shop</button>
+  <button class="demo-btn" onclick="showPage('pdp',this)">👗 Product Detail</button>
+  <button class="demo-btn" onclick="showPage('cart',this)">🛒 Cart</button>
+  <span class="demo-sep">|</span>
+  <span class="demo-label">Admin</span>
+  <button class="demo-btn admin-btn-nav" onclick="showPage('admin-dash',this)">📊 Dashboard</button>
+  <button class="demo-btn admin-btn-nav" onclick="showPage('admin-products',this)">📦 Products</button>
+  <button class="demo-btn admin-btn-nav" onclick="showPage('admin-add',this)">➕ Add Product</button>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">✓ <span id="toast-msg"></span></div>
+
+<!-- ============================================================
+     PAGE 1: HOMEPAGE
+     ============================================================ -->
+<div id="page-home" class="page active">
+  <nav class="site-nav">
+    <div class="nav-logo">KARYA</div>
+    <div class="nav-links">
+      <a class="nav-link active">New Arrivals</a>
+      <a class="nav-link" onclick="showPage('shop',getDemoBtn('shop'))">Shop</a>
+      <a class="nav-link">Collections</a>
+      <a class="nav-link">Our Story</a>
+    </div>
+    <div class="nav-right">
+      <span class="nav-icon">🔍</span>
+      <span class="nav-icon">♡</span>
+      <span class="nav-icon" onclick="showPage('cart',getDemoBtn('cart'))">🛍️<span class="cart-badge">2</span></span>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-text">
+      <div class="hero-eyebrow">New Arrivals · Spring 2026</div>
+      <h1 class="hero-title">Effortless Floral Shirts<br><em>for</em> Everyday Elegance</h1>
+      <p class="hero-sub">Timeless casual wear crafted for women who love comfort with elegance. Breathable fabrics, feminine designs.</p>
+      <div class="hero-ctas">
+        <button class="btn-primary" onclick="showPage('shop',getDemoBtn('shop'))">Shop New Arrivals</button>
+        <button class="btn-outline">Explore Collection</button>
+      </div>
+    </div>
+    <div class="hero-visual"><span class="hero-flower">✿</span></div>
+  </div>
+
+  <!-- Featured Collection -->
+  <div class="section">
+    <div class="section-eyebrow">Curated for You</div>
+    <div class="section-title">Featured Collection</div>
+    <div class="section-sub">Beautiful & Feminine Casual Shirts</div>
+    <div class="products-grid-4">
+      <div class="product-card" onclick="showPage('pdp',getDemoBtn('pdp'))">
+        <div class="product-img-wrap">
+          <div class="product-img img-skyblue" style="height:280px;">✿</div>
+          <div class="quick-view-overlay">Quick View</div>
+          <div class="wish-icon">♡</div>
+        </div>
+        <div class="product-info">
+          <div class="product-name">Sky Blue Floral Shirt</div>
+          <div class="product-price"><span class="gbp">£399</span> ₹3,200</div>
+        </div>
+      </div>
+      <div class="product-card" onclick="showPage('pdp',getDemoBtn('pdp'))">
+        <div class="product-img-wrap">
+          <div class="product-img img-cream" style="height:280px;">✾</div>
+          <div class="quick-view-overlay">Quick View</div>
+          <div class="wish-icon">♡</div>
+        </div>
+        <div class="product-info">
+          <div class="product-name">Soft Vintage Floral Shirt</div>
+          <div class="product-price"><span class="gbp">£330</span> ₹3,200</div>
+        </div>
+      </div>
+      <div class="product-card" onclick="showPage('pdp',getDemoBtn('pdp'))">
+        <div class="product-img-wrap">
+          <div class="product-img img-peach" style="height:280px;">❀</div>
+          <div class="quick-view-overlay">Quick View</div>
+          <div class="wish-icon">♡</div>
+        </div>
+        <div class="product-info">
+          <div class="product-name">Peach Blossom Shirt</div>
+          <div class="product-price"><span class="gbp">£399</span> ₹3,000</div>
+        </div>
+      </div>
+      <div class="product-card" onclick="showPage('pdp',getDemoBtn('pdp'))">
+        <div class="product-img-wrap">
+          <div class="product-img img-pink" style="height:280px;">✿</div>
+          <div class="quick-view-overlay">Quick View</div>
+          <div class="wish-icon">♡</div>
+        </div>
+        <div class="product-info">
+          <div class="product-name">Pink Ditsy Floral Shirt</div>
+          <div class="product-price"><span class="gbp">£390</span> ₹3,200</div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:36px;">
+      <button class="btn-primary" onclick="showPage('shop',getDemoBtn('shop'))">Shop All Products</button>
+    </div>
+  </div>
+
+  <!-- Story section -->
+  <div class="story-section">
+    <div class="story-img">❀</div>
+    <div class="story-content">
+      <div class="story-eyebrow">About Karya</div>
+      <h2 class="story-title">Wear stories,<br>not just clothes.</h2>
+      <p class="story-body">Karya creates timeless casual wear for women who love comfort with elegance. Every piece is thoughtfully crafted using breathable, feminine fabrics — designed to move with you through every moment of your day, from morning coffee to evening strolls.</p>
+      <a class="story-link">Learn More About Us →</a>
+    </div>
+  </div>
+
+  <!-- Benefits bar -->
+  <div class="benefits-bar">
+    <div class="benefit-item"><div class="benefit-icon">🌿</div><div class="benefit-name">Breathable<br>Fabrics</div></div>
+    <div class="benefit-item"><div class="benefit-icon">✿</div><div class="benefit-name">Feminine<br>Designs</div></div>
+    <div class="benefit-item"><div class="benefit-icon">📦</div><div class="benefit-name">Fast Shipping<br>UK &amp; India</div></div>
+    <div class="benefit-item"><div class="benefit-icon">↩</div><div class="benefit-name">Free Easy<br>Returns</div></div>
+  </div>
+
+  <!-- New Arrivals second section -->
+  <div class="section" style="background:white;">
+    <div class="section-eyebrow">Just In</div>
+    <div class="section-title">New This Week</div>
+    <div class="section-sub">Fresh styles, straight from the studio</div>
+    <div class="products-grid-3">
+      <div class="product-card" onclick="showPage('pdp',getDemoBtn('pdp'))">
+        <div class="product-img-wrap"><div class="product-img img-sage" style="height:240px;">✾</div><div class="quick-view-overlay">Quick View</div></div>
+        <div class="product-info"><div class="product-name">Sage Garden Shirt</div><div class="product-price"><span class="gbp">£350</span> ₹2,800</div></div>
+      </div>
+      <div class="product-card" onclick="showPage('pdp',getDemoBtn('pdp'))">
+        <div class="product-img-wrap"><div class="product-img img-lavender" style="height:240px;">❁</div><div class="quick-view-overlay">Quick View</div></div>
+        <div class="product-info"><div class="product-name">Lavender Meadow Shirt</div><div class="product-price"><span class="gbp">£420</span> ₹3,400</div></div>
+      </div>
+      <div class="product-card" onclick="showPage('pdp',getDemoBtn('pdp'))">
+        <div class="product-img-wrap"><div class="product-img img-white-floral" style="height:240px;">✿</div><div class="quick-view-overlay">Quick View</div></div>
+        <div class="product-info"><div class="product-name">White Blossom Shirt</div><div class="product-price"><span class="gbp">£365</span> ₹2,950</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div>
+      <div class="footer-brand-name">KARYA</div>
+      <p class="footer-tagline">Timeless casual wear for women who love comfort with elegance. Handcrafted with breathable fabrics.</p>
+      <div class="footer-socials">
+        <div class="social-btn">📸</div>
+        <div class="social-btn">📘</div>
+        <div class="social-btn">🐦</div>
+        <div class="social-btn">📌</div>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Shop</div>
+      <a class="footer-link">New Arrivals</a>
+      <a class="footer-link">Floral Shirts</a>
+      <a class="footer-link">Casual Tops</a>
+      <a class="footer-link">Linen Collection</a>
+      <a class="footer-link">Best Sellers</a>
+    </div>
+    <div>
+      <div class="footer-col-title">Help</div>
+      <a class="footer-link">Shipping Info</a>
+      <a class="footer-link">Returns & Exchanges</a>
+      <a class="footer-link">Size Guide</a>
+      <a class="footer-link">Care Instructions</a>
+      <a class="footer-link">Contact Us</a>
+    </div>
+    <div>
+      <div class="footer-col-title">Company</div>
+      <a class="footer-link">Our Story</a>
+      <a class="footer-link">Sustainability</a>
+      <a class="footer-link">Careers</a>
+      <a class="footer-link">Press</a>
+    </div>
+  </footer>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 Karya Clothing Ltd. All rights reserved.</span>
+    <div class="payment-icons">
+      <span>💳 Visa</span><span>💳 Mastercard</span><span>UPI</span><span>Razorpay</span><span>Stripe</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     PAGE 2: SHOP
+     ============================================================ -->
+<div id="page-shop" class="page">
+  <nav class="site-nav">
+    <div class="nav-logo">KARYA</div>
+    <div class="nav-links">
+      <a class="nav-link" onclick="showPage('home',getDemoBtn('home'))">New Arrivals</a>
+      <a class="nav-link active">Shop</a>
+      <a class="nav-link">Collections</a>
+      <a class="nav-link">Our Story</a>
+    </div>
+    <div class="nav-right">
+      <span class="nav-icon">🔍</span>
+      <span class="nav-icon">♡</span>
+      <span class="nav-icon" onclick="showPage('cart',getDemoBtn('cart'))">🛍️<span class="cart-badge">2</span></span>
+    </div>
+  </nav>
+  <div class="shop-header">
+    <div class="breadcrumb">Home › <span>Shop</span></div>
+    <h1 class="shop-header-title">All Products</h1>
+  </div>
+  <div class="shop-layout">
+    <!-- Sidebar -->
+    <div class="shop-sidebar">
+      <div class="filter-group">
+        <div class="filter-heading">Category</div>
+        <div class="filter-option"><input type="checkbox" checked/><label>Floral Shirts <span>(12)</span></label></div>
+        <div class="filter-option"><input type="checkbox"/><label>Casual Tops <span>(8)</span></label></div>
+        <div class="filter-option"><input type="checkbox"/><label>Linen Shirts <span>(6)</span></label></div>
+        <div class="filter-option"><input type="checkbox"/><label>Formal <span>(4)</span></label></div>
+      </div>
+      <div class="filter-group">
+        <div class="filter-heading">Colour</div>
+        <div class="color-grid">
+          <div class="color-swatch active" style="background:#B8D4E8" title="Sky Blue"></div>
+          <div class="color-swatch" style="background:#F2B4C8" title="Blush Pink"></div>
+          <div class="color-swatch" style="background:#F5C4A4" title="Peach"></div>
+          <div class="color-swatch" style="background:#EBE0D2" title="Cream"></div>
+          <div class="color-swatch" style="background:#BAD4C0" title="Sage"></div>
+          <div class="color-swatch" style="background:#C8C0DC" title="Lavender"></div>
+          <div class="color-swatch" style="background:#F0EDE8" title="White"></div>
+          <div class="color-swatch" style="background:#F5C0A8" title="Coral"></div>
+        </div>
+      </div>
+      <div class="filter-group">
+        <div class="filter-heading">Size</div>
+        <div class="size-grid">
+          <div class="size-chip">XS</div>
+          <div class="size-chip active">S</div>
+          <div class="size-chip">M</div>
+          <div class="size-chip">L</div>
+          <div class="size-chip">XL</div>
+        </div>
+      </div>
+      <div class="filter-group">
+        <div class="filter-heading">Price Range</div>
+        <div class="price-range">£200 — £600<input type="range" min="200" max="600" value="600"/></div>
+      </div>
+      <div class="filter-group">
+        <div class="filter-heading">Fabric</div>
+        <div class="filter-option"><input type="checkbox" checked/><label>Cotton Voile</label></div>
+        <div class="filter-option"><input type="checkbox"/><label>Pure Linen</label></div>
+        <div class="filter-option"><input type="checkbox"/><label>Cotton-Linen Blend</label></div>
+      </div>
+    </div>
+    <!-- Main grid -->
+    <div class="shop-main">
+      <div class="shop-toolbar">
+        <span class="results-info">Showing <strong>24 products</strong></span>
+        <div class="sort-wrap">
+          <span class="sort-label">Sort by</span>
+          <select class="sort-select">
+            <option>Newest First</option>
+            <option>Price: Low to High</option>
+            <option>Price: High to Low</option>
+            <option>Best Sellers</option>
+            <option>Most Reviewed</option>
+          </select>
+        </div>
+      </div>
+      <div class="active-filters">
+        <div class="filter-pill">Floral Shirts <span>×</span></div>
+        <div class="filter-pill">Sky Blue <span>×</span></div>
+        <div class="filter-pill">Size S <span>×</span></div>
+      </div>
+      <div class="products-grid-3">
+        <div class="product-card" onclick="showPage('pdp',getDemoBtn('pdp'))"><div class="product-img-wrap"><div class="product-img img-skyblue" style="height:260px;">✿</div><div class="quick-view-overlay">Quick View</div><div class="wish-icon">♡</div></div><div class="product-info"><div class="product-name">Sky Blue Floral Shirt</div><div class="product-price"><span class="gbp">£399</span> ₹3,200</div></div></div>
+        <div class="product-card" onclick="showPage('pdp',getDemoBtn('pdp'))"><div class="product-img-wrap"><div class="product-img img-cream" style="height:260px;">✾</div><div class="quick-view-overlay">Quick View</div><div class="wish-icon">♡</div></div><div class="product-info"><div class="product-name">Soft Vintage Floral Shirt</div><div class="product-price"><span class="gbp">£330</span> ₹3,200</div></div></div>
+        <div class="product-card" onclick="showPage('pdp',getDemoBtn('pdp'))"><div class="product-img-wrap"><div class="product-img img-peach" style="height:260px;">❀</div><div class="quick-view-overlay">Quick View</div><div class="wish-icon">♡</div></div><div class="product-info"><div class="product-name">Peach Blossom Shirt</div><div class="product-price"><span class="gbp">£399</span> ₹3,000</div></div></div>
+        <div class="product-card" onclick="showPage('pdp',getDemoBtn('pdp'))"><div class="product-img-wrap"><div class="product-img img-pink" style="height:260px;">✿</div><div class="quick-view-overlay">Quick View</div><div class="wish-icon">♡</div></div><div class="product-info"><div class="product-name">Pink Ditsy Floral Shirt</div><div class="product-price"><span class="gbp">£390</span> ₹3,200</div></div></div>
+        <div class="product-card" onclick="showPage('pdp',getDemoBtn('pdp'))"><div class="product-img-wrap"><div class="product-img img-sage" style="height:260px;">✾</div><div class="quick-view-overlay">Quick View</div><div class="wish-icon">♡</div></div><div class="product-info"><div class="product-name">Sage Garden Shirt</div><div class="product-price"><span class="gbp">£350</span> ₹2,800</div></div></div>
+        <div class="product-card" onclick="showPage('pdp',getDemoBtn('pdp'))"><div class="product-img-wrap"><div class="product-img img-lavender" style="height:260px;">❁</div><div class="quick-view-overlay">Quick View</div><div class="wish-icon">♡</div></div><div class="product-info"><div class="product-name">Lavender Meadow Shirt</div><div class="product-price"><span class="gbp">£420</span> ₹3,400</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     PAGE 3: PRODUCT DETAIL
+     ============================================================ -->
+<div id="page-pdp" class="page">
+  <nav class="site-nav">
+    <div class="nav-logo">KARYA</div>
+    <div class="nav-links">
+      <a class="nav-link" onclick="showPage('home',getDemoBtn('home'))">New Arrivals</a>
+      <a class="nav-link" onclick="showPage('shop',getDemoBtn('shop'))">Shop</a>
+      <a class="nav-link">Collections</a>
+    </div>
+    <div class="nav-right">
+      <span class="nav-icon">🔍</span>
+      <span class="nav-icon">♡</span>
+      <span class="nav-icon" onclick="showPage('cart',getDemoBtn('cart'))">🛍️<span class="cart-badge">2</span></span>
+    </div>
+  </nav>
+  <div style="padding:12px 32px;border-bottom:1px solid var(--border);background:white;font-size:11px;color:var(--text-light);">
+    Home › <a onclick="showPage('shop',getDemoBtn('shop'))" style="cursor:pointer;">Shop</a> › <span style="color:var(--rose);">Sky Blue Floral Shirt</span>
+  </div>
+  <div class="pdp-wrap">
+    <div class="pdp-gallery">
+      <div id="pdp-main-img" class="pdp-main-img img-skyblue">✿</div>
+      <div class="pdp-thumbs">
+        <div class="pdp-thumb img-skyblue active" onclick="changePdpImg('img-skyblue','✿',this)">✿</div>
+        <div class="pdp-thumb img-cream" onclick="changePdpImg('img-cream','✾',this)">✾</div>
+        <div class="pdp-thumb img-peach" onclick="changePdpImg('img-peach','❀',this)">❀</div>
+        <div class="pdp-thumb img-pink" onclick="changePdpImg('img-pink','✿',this)">✿</div>
+      </div>
+    </div>
+    <div class="pdp-info">
+      <div class="pdp-category">Karya · Floral Shirts</div>
+      <h1 class="pdp-name">Sky Blue Floral Shirt</h1>
+      <div class="pdp-rating-row">
+        <span class="stars">★★★★★</span>
+        <span class="rating-text">4.9 · 86 reviews</span>
+      </div>
+      <div class="pdp-price">£399</div>
+      <div class="pdp-price-inr">₹3,200 incl. all taxes &amp; duties</div>
+      <hr class="pdp-divider"/>
+      <div class="pdp-field-label">Colour — <span class="color-selected-name" id="pdp-color-name">Sky Blue</span></div>
+      <div class="pdp-colors">
+        <div class="pdp-color active" style="background:#B8D4E8" onclick="selectColor(this,'Sky Blue')"></div>
+        <div class="pdp-color" style="background:#F2B4C8" onclick="selectColor(this,'Blush Pink')"></div>
+        <div class="pdp-color" style="background:#EBE0D2" onclick="selectColor(this,'Cream')"></div>
+        <div class="pdp-color" style="background:#BAD4C0" onclick="selectColor(this,'Sage Green')"></div>
+      </div>
+      <div class="pdp-field-label">Size <a style="color:var(--rose);font-size:10px;cursor:pointer;font-weight:400;text-transform:none;letter-spacing:0"> — Size Guide</a></div>
+      <div class="pdp-sizes">
+        <div class="pdp-size" onclick="selectSize(this)">XS</div>
+        <div class="pdp-size" onclick="selectSize(this)">S</div>
+        <div class="pdp-size selected" onclick="selectSize(this)">M</div>
+        <div class="pdp-size" onclick="selectSize(this)">L</div>
+        <div class="pdp-size" onclick="selectSize(this)">XL</div>
+        <div class="pdp-size oos">XXL</div>
+      </div>
+      <div class="pdp-field-label">Quantity</div>
+      <div class="pdp-qty-wrap">
+        <div class="qty-ctrl">
+          <button class="qty-btn" onclick="changeQty(-1)">−</button>
+          <div class="qty-count" id="pdp-qty">1</div>
+          <button class="qty-btn" onclick="changeQty(1)">+</button>
+        </div>
+        <span style="font-size:12px;color:var(--text-light);">Only 8 left in stock</span>
+      </div>
+      <div class="pdp-actions">
+        <button class="btn-addcart" onclick="showToast('Item added to cart! 🛍️');showPage('cart',getDemoBtn('cart'))">Add to Cart</button>
+        <button class="btn-buynow" onclick="showPage('cart',getDemoBtn('cart'))">Buy Now</button>
+      </div>
+      <div class="pdp-utils">
+        <span class="pdp-util-link">♡ Add to Wishlist</span>
+        <span class="pdp-util-link">🔗 Share</span>
+      </div>
+      <div class="pdp-stock-info">✓ In stock — Ships within 2 business days · Free UK delivery over £100</div>
+    </div>
+  </div>
+  <div class="pdp-tabs-section">
+    <div class="pdp-tab-btns">
+      <button class="pdp-tab-btn active" onclick="switchPdpTab(0,this)">Description</button>
+      <button class="pdp-tab-btn" onclick="switchPdpTab(1,this)">Fabric &amp; Care</button>
+      <button class="pdp-tab-btn" onclick="switchPdpTab(2,this)">Shipping &amp; Returns</button>
+    </div>
+    <div class="pdp-tab-content active">A beautifully crafted floral shirt in a soft sky-blue palette, adorned with delicate hand-drawn pink blossoms. Designed with a relaxed, feminine fit featuring a classic collar, pearlescent buttons, and a graceful hemline. Perfect for casual brunches, weekend outings, or elevated office wear paired with tailored trousers or a sleek skirt.</div>
+    <div class="pdp-tab-content">100% Premium Cotton Voile. Weave: Plain weave, thread count 120. GSM: 80. Machine wash cold (30°C), gentle cycle. Do not bleach. Tumble dry low. Iron on low heat — best ironed slightly damp. Do not dry clean. Wash dark colours separately. Breathable, soft, and gets better with every wash.</div>
+    <div class="pdp-tab-content"><strong>UK:</strong> Standard 3–5 days (Free over £100) · Express 1–2 days (£5.99)<br><br><strong>India:</strong> Standard 4–7 days (Free over ₹2,500) · Express 2–3 days (₹199)<br><br><strong>Returns:</strong> Free returns within 30 days for UK orders. Items must be unworn, unwashed, with original tags. India returns — ₹99 return shipping. Refund processed within 3–5 business days after we receive the item.</div>
+  </div>
+</div>
+
+<!-- ============================================================
+     PAGE 4: CART
+     ============================================================ -->
+<div id="page-cart" class="page">
+  <nav class="site-nav">
+    <div class="nav-logo">KARYA</div>
+    <div class="nav-links">
+      <a class="nav-link" onclick="showPage('home',getDemoBtn('home'))">New Arrivals</a>
+      <a class="nav-link" onclick="showPage('shop',getDemoBtn('shop'))">Shop</a>
+    </div>
+    <div class="nav-right">
+      <span class="nav-icon">🔍</span>
+      <span class="nav-icon">♡</span>
+      <span class="nav-icon">🛍️<span class="cart-badge">2</span></span>
+    </div>
+  </nav>
+  <div class="cart-page">
+    <h1 class="cart-page-title">Your Cart — 2 items</h1>
+    <div class="cart-layout">
+      <div class="cart-items">
+        <div class="cart-item-row">
+          <div class="cart-item-img img-skyblue">✿</div>
+          <div class="cart-item-info">
+            <div class="cart-item-name">Sky Blue Floral Shirt</div>
+            <div class="cart-item-meta">Size: M · Colour: Sky Blue · SKU: KA-SBF-M</div>
+            <div class="cart-item-qty">
+              <button class="cart-qty-btn">−</button>
+              <div class="cart-qty-num">1</div>
+              <button class="cart-qty-btn">+</button>
+            </div>
+            <a class="cart-item-remove">Remove item</a>
+          </div>
+          <div class="cart-item-price">£399</div>
+        </div>
+        <div class="cart-item-row">
+          <div class="cart-item-img img-pink">✿</div>
+          <div class="cart-item-info">
+            <div class="cart-item-name">Pink Ditsy Floral Shirt</div>
+            <div class="cart-item-meta">Size: S · Colour: Blush Pink · SKU: KA-PDF-S</div>
+            <div class="cart-item-qty">
+              <button class="cart-qty-btn">−</button>
+              <div class="cart-qty-num">1</div>
+              <button class="cart-qty-btn">+</button>
+            </div>
+            <a class="cart-item-remove">Remove item</a>
+          </div>
+          <div class="cart-item-price">£390</div>
+        </div>
+        <div class="promo-section">
+          <div class="promo-row">
+            <input class="promo-input" id="promo-input" placeholder="Have a promo code? Enter here…" type="text"/>
+            <button class="promo-btn" onclick="applyPromo()">Apply</button>
+          </div>
+          <div class="promo-success" id="promo-success">✓ WELCOME10 applied — saving £78.90!</div>
+        </div>
+      </div>
+      <div class="order-summary-box">
+        <div class="summary-title">Order Summary</div>
+        <div class="summary-line"><span class="label">Subtotal (2 items)</span><span class="value">£789.00</span></div>
+        <div class="summary-line"><span class="label">Shipping</span><span class="value green">Free</span></div>
+        <div class="summary-line" id="discount-line" style="display:none"><span class="label">Discount (WELCOME10)</span><span class="value red">−£78.90</span></div>
+        <div class="summary-line"><span class="label">Estimated Tax</span><span class="value">Included</span></div>
+        <hr class="summary-divider"/>
+        <div class="summary-line"><span class="summary-total">Total</span><span class="summary-total" id="cart-total">£789.00</span></div>
+        <div class="summary-tax-note">Tax and duties included. Free UK shipping applied.</div>
+        <button class="checkout-btn" onclick="showToast('Redirecting to Checkout…')">Proceed to Checkout</button>
+        <div class="secure-note">🔒 Secure Checkout · SSL Encrypted</div>
+        <div class="payment-methods">
+          <div class="pm-label">We Accept</div>
+          <div class="pm-icons">
+            <span class="pm-icon">VISA</span>
+            <span class="pm-icon">MC</span>
+            <span class="pm-icon">UPI</span>
+            <span class="pm-icon">Stripe</span>
+            <span class="pm-icon">COD</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     PAGE 5: ADMIN DASHBOARD
+     ============================================================ -->
+<div id="page-admin-dash" class="page">
+  <div class="admin-wrap">
+    <div class="admin-sidebar">
+      <div class="admin-brand"><div class="admin-brand-name">KARYA</div><div class="admin-brand-sub">Admin Panel</div></div>
+      <div class="admin-nav-section">
+        <div class="admin-nav-label">Main</div>
+        <div class="admin-nav-item active"><span class="admin-nav-icon">📊</span> Dashboard</div>
+        <div class="admin-nav-item" onclick="showPage('admin-products',getDemoBtn('admin-products'))"><span class="admin-nav-icon">📦</span> Products</div>
+        <div class="admin-nav-item"><span class="admin-nav-icon">📋</span> Orders <span class="admin-nav-badge">7</span></div>
+        <div class="admin-nav-item"><span class="admin-nav-icon">👥</span> Customers</div>
+      </div>
+      <div class="admin-nav-section">
+        <div class="admin-nav-label">Marketing</div>
+        <div class="admin-nav-item"><span class="admin-nav-icon">🎁</span> Discounts</div>
+        <div class="admin-nav-item"><span class="admin-nav-icon">🖼️</span> Banners</div>
+        <div class="admin-nav-item"><span class="admin-nav-icon">📧</span> Emails</div>
+      </div>
+      <div class="admin-nav-section">
+        <div class="admin-nav-label">Reports</div>
+        <div class="admin-nav-item"><span class="admin-nav-icon">📈</span> Analytics</div>
+        <div class="admin-nav-item"><span class="admin-nav-icon">↩️</span> Returns</div>
+      </div>
+      <div class="admin-nav-section">
+        <div class="admin-nav-label">System</div>
+        <div class="admin-nav-item"><span class="admin-nav-icon">🚚</span> Shipping</div>
+        <div class="admin-nav-item"><span class="admin-nav-icon">💳</span> Payments</div>
+        <div class="admin-nav-item"><span class="admin-nav-icon">⚙️</span> Settings</div>
+      </div>
+    </div>
+    <div class="admin-main">
+      <div class="admin-topbar">
+        <div class="admin-page-title">Dashboard Overview</div>
+        <div class="admin-topbar-actions">
+          <button class="admin-btn admin-btn-secondary">📥 Export Report</button>
+          <button class="admin-btn admin-btn-primary" onclick="showPage('admin-add',getDemoBtn('admin-add'))">+ Add Product</button>
+        </div>
+      </div>
+      <div class="admin-content">
+        <!-- KPIs -->
+        <div class="kpi-row">
+          <div class="kpi-card"><div class="kpi-label">Today's Revenue</div><div class="kpi-value">£2,840</div><div class="kpi-change up">↑ 18% vs yesterday</div></div>
+          <div class="kpi-card"><div class="kpi-label">Orders Today</div><div class="kpi-value">34</div><div class="kpi-change up">↑ 12% vs yesterday</div></div>
+          <div class="kpi-card"><div class="kpi-label">New Customers</div><div class="kpi-value">12</div><div class="kpi-change up">↑ 5% this week</div></div>
+          <div class="kpi-card"><div class="kpi-label">Conversion Rate</div><div class="kpi-value">3.2%</div><div class="kpi-change down">↓ 0.3% vs yesterday</div></div>
+        </div>
+        <!-- Chart -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-card-title">Revenue This Week</div>
+            <div class="chart-period-tabs">
+              <button class="period-tab active">7D</button>
+              <button class="period-tab">30D</button>
+              <button class="period-tab">90D</button>
+            </div>
+          </div>
+          <div class="bar-chart-wrap">
+            <div class="bar-wrap"><div class="bar-amount">£1.8k</div><div class="bar-item" style="height:55%"></div><div class="bar-day">MON</div></div>
+            <div class="bar-wrap"><div class="bar-amount">£2.3k</div><div class="bar-item" style="height:70%"></div><div class="bar-day">TUE</div></div>
+            <div class="bar-wrap"><div class="bar-amount">£1.5k</div><div class="bar-item" style="height:46%"></div><div class="bar-day">WED</div></div>
+            <div class="bar-wrap"><div class="bar-amount">£2.9k</div><div class="bar-item" style="height:88%"></div><div class="bar-day">THU</div></div>
+            <div class="bar-wrap"><div class="bar-amount">£2.1k</div><div class="bar-item" style="height:64%"></div><div class="bar-day">FRI</div></div>
+            <div class="bar-wrap"><div class="bar-amount">£3.1k</div><div class="bar-item" style="height:94%"></div><div class="bar-day">SAT</div></div>
+            <div class="bar-wrap"><div class="bar-amount">£2.8k</div><div class="bar-item" style="height:85%"></div><div class="bar-day">SUN</div></div>
+          </div>
+        </div>
+        <div class="dash-grid">
+          <!-- Orders -->
+          <div class="data-card dash-grid-wide">
+            <div class="data-card-header"><div class="data-card-title">Recent Orders</div><div class="data-card-link">View All Orders →</div></div>
+            <table class="data-table">
+              <thead><tr><th>Order #</th><th>Customer</th><th>Product</th><th>Total</th><th>Date</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>#KA-1089</td><td>Priya Sharma</td><td><span class="table-product-img img-skyblue">✿</span>Sky Blue Floral (M)</td><td>£399</td><td>24 Apr 2026</td><td><span class="badge badge-processing">Processing</span></td></tr>
+                <tr><td>#KA-1088</td><td>Emma Wilson</td><td><span class="table-product-img img-pink">✿</span>Pink Ditsy (S) ×2</td><td>£780</td><td>24 Apr 2026</td><td><span class="badge badge-shipped">Shipped</span></td></tr>
+                <tr><td>#KA-1087</td><td>Ananya Patel</td><td><span class="table-product-img img-peach">❀</span>Peach Blossom (L)</td><td>£399</td><td>23 Apr 2026</td><td><span class="badge badge-delivered">Delivered</span></td></tr>
+                <tr><td>#KA-1086</td><td>Sophie Taylor</td><td><span class="table-product-img img-cream">✾</span>Vintage Floral (M)</td><td>£330</td><td>23 Apr 2026</td><td><span class="badge badge-pending">Pending</span></td></tr>
+                <tr><td>#KA-1085</td><td>Meera Reddy</td><td><span class="table-product-img img-lavender">❁</span>Lavender Meadow (S)</td><td>£420</td><td>22 Apr 2026</td><td><span class="badge badge-delivered">Delivered</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- Top products -->
+          <div class="data-card">
+            <div class="data-card-header"><div class="data-card-title">Top Products This Week</div></div>
+            <table class="data-table">
+              <thead><tr><th>Product</th><th>Sold</th><th>Revenue</th></tr></thead>
+              <tbody>
+                <tr><td><span class="table-product-img img-pink">✿</span>Pink Ditsy Floral</td><td>42</td><td>£16,380</td></tr>
+                <tr><td><span class="table-product-img img-skyblue">✿</span>Sky Blue Floral</td><td>38</td><td>£15,162</td></tr>
+                <tr><td><span class="table-product-img img-peach">❀</span>Peach Blossom</td><td>31</td><td>£12,369</td></tr>
+                <tr><td><span class="table-product-img img-lavender">❁</span>Lavender Meadow</td><td>24</td><td>£10,080</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- Low stock -->
+          <div class="data-card">
+            <div class="data-card-header"><div class="data-card-title">⚠️ Low Stock Alerts</div></div>
+            <table class="data-table">
+              <thead><tr><th>Product / Variant</th><th>Stock</th></tr></thead>
+              <tbody>
+                <tr><td>Sky Blue Floral — Size XS</td><td><span class="badge badge-low">3 left</span></td></tr>
+                <tr><td>Peach Blossom — Size M</td><td><span class="badge badge-low">2 left</span></td></tr>
+                <tr><td>Lavender Meadow — Size S</td><td><span class="badge badge-low">4 left</span></td></tr>
+                <tr><td>Pink Ditsy — Size XL</td><td><span class="badge badge-low">1 left</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     PAGE 6: ADMIN PRODUCTS LIST
+     ============================================================ -->
+<div id="page-admin-products" class="page">
+  <div class="admin-wrap">
+    <div class="admin-sidebar">
+      <div class="admin-brand"><div class="admin-brand-name">KARYA</div><div class="admin-brand-sub">Admin Panel</div></div>
+      <div class="admin-nav-section">
+        <div class="admin-nav-label">Main</div>
+        <div class="admin-nav-item" onclick="showPage('admin-dash',getDemoBtn('admin-dash'))"><span class="admin-nav-icon">📊</span> Dashboard</div>
+        <div class="admin-nav-item active"><span class="admin-nav-icon">📦</span> Products</div>
+        <div class="admin-nav-item"><span class="admin-nav-icon">📋</span> Orders <span class="admin-nav-badge">7</span></div>
+        <div class="admin-nav-item"><span class="admin-nav-icon">👥</span> Customers</div>
+        <div class="admin-nav-item"><span class="admin-nav-icon">🎁</span> Discounts</div>
+        <div class="admin-nav-item"><span class="admin-nav-icon">📈</span> Analytics</div>
+        <div class="admin-nav-item"><span class="admin-nav-icon">⚙️</span> Settings</div>
+      </div>
+    </div>
+    <div class="admin-main">
+      <div class="admin-topbar">
+        <div class="admin-page-title">Products</div>
+        <div class="admin-topbar-actions">
+          <button class="admin-btn admin-btn-secondary">📥 Import CSV</button>
+          <button class="admin-btn admin-btn-secondary">📤 Export</button>
+          <button class="admin-btn admin-btn-primary" onclick="showPage('admin-add',getDemoBtn('admin-add'))">+ Add New Product</button>
+        </div>
+      </div>
+      <div class="admin-content" style="padding:0;">
+        <div class="product-table-filters">
+          <div class="filter-tab active">All (24)</div>
+          <div class="filter-tab">Active (20)</div>
+          <div class="filter-tab">Draft (4)</div>
+          <div class="filter-tab">Low Stock (4)</div>
+          <input class="search-input" placeholder="🔍  Search products, SKUs…" type="text"/>
+          <select class="filter-select"><option>All Categories</option><option>Floral Shirts</option><option>Casual Tops</option><option>Linen</option></select>
+          <select class="filter-select"><option>All Stock</option><option>In Stock</option><option>Low Stock</option><option>Out of Stock</option></select>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th><input type="checkbox"/></th>
+              <th>Product</th>
+              <th>SKU</th>
+              <th>Category</th>
+              <th>Price (£)</th>
+              <th>Price (₹)</th>
+              <th>Stock</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="checkbox"/></td>
+              <td><span class="table-product-img img-skyblue">✿</span><strong>Sky Blue Floral Shirt</strong></td>
+              <td style="color:var(--text-mid);font-size:11px;">KA-SBF</td>
+              <td>Floral Shirts</td>
+              <td>£399</td>
+              <td>₹3,200</td>
+              <td><div class="stock-bar-wrap"><div class="stock-bar"><div class="stock-fill" style="width:72%;background:var(--success)"></div></div><span>36</span></div></td>
+              <td><span class="badge badge-active">Active</span></td>
+              <td><a style="color:var(--rose);font-size:11px;cursor:pointer;font-weight:600;" onclick="showPage('admin-add',getDemoBtn('admin-add'))">Edit</a> · <a style="color:var(--text-light);font-size:11px;cursor:pointer;">View</a></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox"/></td>
+              <td><span class="table-product-img img-cream">✾</span><strong>Soft Vintage Floral Shirt</strong></td>
+              <td style="color:var(--text-mid);font-size:11px;">KA-SVF</td>
+              <td>Floral Shirts</td>
+              <td>£330</td>
+              <td>₹3,200</td>
+              <td><div class="stock-bar-wrap"><div class="stock-bar"><div class="stock-fill" style="width:60%;background:var(--success)"></div></div><span>30</span></div></td>
+              <td><span class="badge badge-active">Active</span></td>
+              <td><a style="color:var(--rose);font-size:11px;cursor:pointer;font-weight:600;" onclick="showPage('admin-add',getDemoBtn('admin-add'))">Edit</a> · <a style="color:var(--text-light);font-size:11px;cursor:pointer;">View</a></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox"/></td>
+              <td><span class="table-product-img img-peach">❀</span><strong>Peach Blossom Shirt</strong></td>
+              <td style="color:var(--text-mid);font-size:11px;">KA-PBS</td>
+              <td>Floral Shirts</td>
+              <td>£399</td>
+              <td>₹3,000</td>
+              <td><div class="stock-bar-wrap"><div class="stock-bar"><div class="stock-fill" style="width:18%;background:var(--warning)"></div></div><span style="color:var(--warning);font-weight:600;">9</span></div></td>
+              <td><span class="badge badge-low">Low Stock</span></td>
+              <td><a style="color:var(--rose);font-size:11px;cursor:pointer;font-weight:600;" onclick="showPage('admin-add',getDemoBtn('admin-add'))">Edit</a> · <a style="color:var(--text-light);font-size:11px;cursor:pointer;">View</a></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox"/></td>
+              <td><span class="table-product-img img-pink">✿</span><strong>Pink Ditsy Floral Shirt</strong></td>
+              <td style="color:var(--text-mid);font-size:11px;">KA-PDF</td>
+              <td>Floral Shirts</td>
+              <td>£390</td>
+              <td>₹3,200</td>
+              <td><div class="stock-bar-wrap"><div class="stock-bar"><div class="stock-fill" style="width:88%;background:var(--success)"></div></div><span>44</span></div></td>
+              <td><span class="badge badge-active">Active</span></td>
+              <td><a style="color:var(--rose);font-size:11px;cursor:pointer;font-weight:600;" onclick="showPage('admin-add',getDemoBtn('admin-add'))">Edit</a> · <a style="color:var(--text-light);font-size:11px;cursor:pointer;">View</a></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox"/></td>
+              <td><span class="table-product-img img-sage">✾</span><strong>Sage Garden Shirt</strong></td>
+              <td style="color:var(--text-mid);font-size:11px;">KA-SGS</td>
+              <td>Casual Tops</td>
+              <td>£350</td>
+              <td>₹2,800</td>
+              <td><div class="stock-bar-wrap"><div class="stock-bar"><div class="stock-fill" style="width:50%;background:var(--success)"></div></div><span>25</span></div></td>
+              <td><span class="badge badge-draft">Draft</span></td>
+              <td><a style="color:var(--rose);font-size:11px;cursor:pointer;font-weight:600;" onclick="showPage('admin-add',getDemoBtn('admin-add'))">Edit</a> · <a style="color:var(--text-light);font-size:11px;cursor:pointer;">View</a></td>
+            </tr>
+            <tr>
+              <td><input type="checkbox"/></td>
+              <td><span class="table-product-img img-lavender">❁</span><strong>Lavender Meadow Shirt</strong></td>
+              <td style="color:var(--text-mid);font-size:11px;">KA-LMS</td>
+              <td>Floral Shirts</td>
+              <td>£420</td>
+              <td>₹3,400</td>
+              <td><div class="stock-bar-wrap"><div class="stock-bar"><div class="stock-fill" style="width:35%;background:var(--success)"></div></div><span>18</span></div></td>
+              <td><span class="badge badge-active">Active</span></td>
+              <td><a style="color:var(--rose);font-size:11px;cursor:pointer;font-weight:600;" onclick="showPage('admin-add',getDemoBtn('admin-add'))">Edit</a> · <a style="color:var(--text-light);font-size:11px;cursor:pointer;">View</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     PAGE 7: ADD / EDIT PRODUCT
+     ============================================================ -->
+<div id="page-admin-add" class="page">
+  <div class="admin-wrap">
+    <div class="admin-sidebar">
+      <div class="admin-brand"><div class="admin-brand-name">KARYA</div><div class="admin-brand-sub">Admin Panel</div></div>
+      <div class="admin-nav-section">
+        <div class="admin-nav-label">Main</div>
+        <div class="admin-nav-item" onclick="showPage('admin-dash',getDemoBtn('admin-dash'))"><span class="admin-nav-icon">📊</span> Dashboard</div>
+        <div class="admin-nav-item active" onclick="showPage('admin-products',getDemoBtn('admin-products'))"><span class="admin-nav-icon">📦</span> Products</div>
+        <div class="admin-nav-item"><span class="admin-nav-icon">📋</span> Orders <span class="admin-nav-badge">7</span></div>
+        <div class="admin-nav-item"><span class="admin-nav-icon">👥</span> Customers</div>
+        <div class="admin-nav-item"><span class="admin-nav-icon">🎁</span> Discounts</div>
+        <div class="admin-nav-item"><span class="admin-nav-icon">📈</span> Analytics</div>
+        <div class="admin-nav-item"><span class="admin-nav-icon">⚙️</span> Settings</div>
+      </div>
+    </div>
+    <div class="admin-main">
+      <div class="admin-topbar">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <a onclick="showPage('admin-products',getDemoBtn('admin-products'))" style="font-size:20px;cursor:pointer;color:var(--text-mid);">←</a>
+          <div class="admin-page-title">Add New Product</div>
+        </div>
+        <div class="admin-topbar-actions">
+          <button class="admin-btn admin-btn-secondary">Preview on Site ↗</button>
+          <button class="admin-btn admin-btn-secondary">Save as Draft</button>
+          <button class="admin-btn admin-btn-primary" onclick="showToast('Product published successfully! ✓')">Publish Product</button>
+        </div>
+      </div>
+      <div class="add-product-layout">
+        <!-- LEFT: Main form -->
+        <div>
+
+          <!-- Step 1: Basic Info -->
+          <div class="form-card">
+            <div class="form-card-title">① Basic Information</div>
+            <div class="form-field">
+              <label class="form-label">Product Name <span class="required">*</span></label>
+              <input class="form-input" type="text" value="Rose Garden Floral Shirt" placeholder="e.g. Sky Blue Floral Shirt"/>
+              <div class="form-hint">This is what customers will see. Be descriptive and specific.</div>
+            </div>
+            <div class="form-field">
+              <label class="form-label">Description <span class="required">*</span></label>
+              <textarea class="form-textarea" style="min-height:120px;">A beautifully crafted floral shirt in a soft rose palette, adorned with delicate hand-painted garden blossoms. Designed with a relaxed, feminine fit featuring a classic collar and pearlescent buttons. Perfect for casual brunches, weekend outings, or elevated office wear.</textarea>
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label class="form-label">Category <span class="required">*</span></label>
+                <select class="form-select">
+                  <option>Floral Shirts</option>
+                  <option>Casual Tops</option>
+                  <option>Linen Collection</option>
+                  <option>Formal</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Fabric / Material</label>
+                <input class="form-input" type="text" value="100% Cotton Voile" placeholder="e.g. Cotton Voile, Pure Linen"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2: Media -->
+          <div class="form-card">
+            <div class="form-card-title">② Product Images</div>
+            <div class="upload-area" onclick="showToast('In the real site, click to open file browser and upload photos')">
+              <div class="upload-icon">📸</div>
+              <div class="upload-text">Drag &amp; drop your product photos here</div>
+              <div class="upload-sub">PNG, JPG, WEBP · Max 10MB per image · Min 800×800px recommended</div>
+              <div class="upload-btn">Choose Files to Upload</div>
+            </div>
+            <!-- Uploaded images preview (demo) -->
+            <div class="uploaded-imgs">
+              <div class="uploaded-img img-skyblue" style="width:80px;height:80px;border:2px solid var(--rose);">✿<span class="main-badge">Main</span></div>
+              <div class="uploaded-img img-cream" style="width:80px;height:80px;">✾</div>
+              <div class="uploaded-img img-peach" style="width:80px;height:80px;">❀</div>
+              <div class="uploaded-img img-pink" style="width:80px;height:80px;">✿</div>
+              <div style="width:80px;height:80px;border:2px dashed var(--border);border-radius:3px;display:flex;align-items:center;justify-content:center;color:var(--text-light);font-size:22px;cursor:pointer;" onclick="showToast('Click to upload more images')">+</div>
+            </div>
+            <div class="form-hint" style="margin-top:8px;">Click the ✿ main image border to set a different photo as the primary product image. Drag images to reorder.</div>
+          </div>
+
+          <!-- Step 3: Pricing -->
+          <div class="form-card">
+            <div class="form-card-title">③ Pricing</div>
+            <div class="form-row">
+              <div class="form-field">
+                <label class="form-label">Price (£ GBP) <span class="required">*</span></label>
+                <input class="form-input" type="number" value="399" placeholder="0.00"/>
+                <div class="form-hint">Customer-facing price in British Pounds</div>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Price (₹ INR) <span class="required">*</span></label>
+                <input class="form-input" type="number" value="3200" placeholder="0"/>
+                <div class="form-hint">Customer-facing price in Indian Rupees</div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label class="form-label">Compare-at Price (£)</label>
+                <input class="form-input" type="number" value="499" placeholder="Strike-through original price"/>
+                <div class="form-hint">Shows crossed-out price — leave empty if no sale</div>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Cost per Item (£)</label>
+                <input class="form-input" type="number" value="120" placeholder="Your cost — not shown to customers"/>
+                <div class="form-hint">Used to calculate profit margin</div>
+              </div>
+            </div>
+            <div style="padding:12px 16px;background:#F0FAF4;border-radius:2px;font-size:12px;color:var(--success);font-weight:600;">
+              📊 Profit margin: £279 per unit (70%) at selling price of £399
+            </div>
+          </div>
+
+          <!-- Step 4: Variants -->
+          <div class="form-card">
+            <div class="form-card-title">④ Colours &amp; Sizes (Variants)</div>
+            <div style="font-size:13px;color:var(--text-mid);margin-bottom:18px;line-height:1.7;">Add every colour and size you stock. The system will automatically create a stock entry for every combination (e.g. Rose Pink × S, Rose Pink × M, etc.)</div>
+
+            <div class="form-field">
+              <label class="form-label">Available Colours</label>
+              <div class="variant-options">
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+                  <div class="variant-tag" style="background:#FFE8F0;color:#9E3D55;">🔴 Rose Pink <span>×</span></div>
+                  <div class="variant-tag" style="background:#E8F0FF;color:#2C4F9E;">🔵 Sky Blue <span>×</span></div>
+                  <div class="variant-tag" style="background:#FFF4E8;color:#9E6E2C;">🟠 Peach <span>×</span></div>
+                </div>
+                <div class="add-variant-row">
+                  <input class="variant-input" placeholder="Add a colour (e.g. Sage Green)…" type="text"/>
+                  <button class="variant-add-btn" onclick="showToast('Colour added to list!')">+ Add</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label class="form-label">Available Sizes</label>
+              <div class="variant-options">
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+                  <div class="variant-tag">XS <span>×</span></div>
+                  <div class="variant-tag">S <span>×</span></div>
+                  <div class="variant-tag">M <span>×</span></div>
+                  <div class="variant-tag">L <span>×</span></div>
+                  <div class="variant-tag">XL <span>×</span></div>
+                </div>
+                <div class="add-variant-row">
+                  <input class="variant-input" placeholder="Add a size (e.g. XXL)…" type="text"/>
+                  <button class="variant-add-btn" onclick="showToast('Size added to list!')">+ Add</button>
+                </div>
+              </div>
+            </div>
+
+            <label class="form-label" style="margin-top:6px;">Stock Quantity per Variant</label>
+            <div style="font-size:12px;color:var(--text-mid);margin-bottom:12px;">Enter how many units you have for each Colour + Size combination. Leave 0 if not available.</div>
+            <div style="overflow-x:auto;">
+              <table class="variant-matrix">
+                <thead>
+                  <tr>
+                    <th>Colour \ Size</th>
+                    <th>XS</th><th>S</th><th>M</th><th>L</th><th>XL</th>
+                    <th>Price Override (£)</th>
+                    <th>SKU</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="variant-color-dot" style="background:#F2B4C8;"></span>Rose Pink</td>
+                    <td><input class="variant-cell-input" type="number" value="5" style="width:55px;"/></td>
+                    <td><input class="variant-cell-input" type="number" value="12" style="width:55px;"/></td>
+                    <td><input class="variant-cell-input" type="number" value="15" style="width:55px;"/></td>
+                    <td><input class="variant-cell-input" type="number" value="10" style="width:55px;"/></td>
+                    <td><input class="variant-cell-input" type="number" value="8" style="width:55px;"/></td>
+                    <td><input class="variant-cell-input" type="text" placeholder="Default" style="width:90px;"/></td>
+                    <td><input class="variant-cell-input" type="text" value="KA-RGS-PNK" style="width:110px;"/></td>
+                  </tr>
+                  <tr>
+                    <td><span class="variant-color-dot" style="background:#B8D4E8;"></span>Sky Blue</td>
+                    <td><input class="variant-cell-input" type="number" value="6" style="width:55px;"/></td>
+                    <td><input class="variant-cell-input" type="number" value="14" style="width:55px;"/></td>
+                    <td><input class="variant-cell-input" type="number" value="18" style="width:55px;"/></td>
+                    <td><input class="variant-cell-input" type="number" value="12" style="width:55px;"/></td>
+                    <td><input class="variant-cell-input" type="number" value="7" style="width:55px;"/></td>
+                    <td><input class="variant-cell-input" type="text" placeholder="Default" style="width:90px;"/></td>
+                    <td><input class="variant-cell-input" type="text" value="KA-RGS-BLU" style="width:110px;"/></td>
+                  </tr>
+                  <tr>
+                    <td><span class="variant-color-dot" style="background:#F5C4A4;"></span>Peach</td>
+                    <td><input class="variant-cell-input" type="number" value="4" style="width:55px;"/></td>
+                    <td><input class="variant-cell-input" type="number" value="10" style="width:55px;"/></td>
+                    <td><input class="variant-cell-input" type="number" value="13" style="width:55px;"/></td>
+                    <td><input class="variant-cell-input" type="number" value="9" style="width:55px;"/></td>
+                    <td><input class="variant-cell-input" type="number" value="5" style="width:55px;"/></td>
+                    <td><input class="variant-cell-input" type="text" placeholder="Default" style="width:90px;"/></td>
+                    <td><input class="variant-cell-input" type="text" value="KA-RGS-PCH" style="width:110px;"/></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Step 5: SEO -->
+          <div class="form-card">
+            <div class="form-card-title">⑤ SEO &amp; Discoverability</div>
+            <div class="form-field">
+              <label class="form-label">URL Slug</label>
+              <div style="display:flex;align-items:center;border:1px solid var(--border);border-radius:2px;overflow:hidden;">
+                <span style="padding:10px 12px;background:#FAF7F6;font-size:12px;color:var(--text-mid);border-right:1px solid var(--border);white-space:nowrap;">karya.com/products/</span>
+                <input style="flex:1;padding:10px 12px;border:none;font-size:13px;font-family:var(--sans);" type="text" value="rose-garden-floral-shirt"/>
+              </div>
+            </div>
+            <div class="form-field">
+              <label class="form-label">Meta Title (for Google)</label>
+              <input class="form-input" type="text" value="Rose Garden Floral Shirt | Karya Clothing UK &amp; India"/>
+              <div class="form-hint">Ideal length: 50–60 characters. Currently: 50 characters ✓</div>
+            </div>
+            <div class="form-field">
+              <label class="form-label">Meta Description</label>
+              <textarea class="form-textarea" style="min-height:70px;">Shop the Rose Garden Floral Shirt from Karya — breathable cotton voile, feminine design, available in UK &amp; India. Free shipping over £100.</textarea>
+              <div class="form-hint">Ideal length: 140–160 characters. Currently: 148 characters ✓</div>
+            </div>
+            <div style="border:1px solid var(--border);border-radius:3px;padding:16px;background:#FAF7F6;">
+              <div style="font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-mid);margin-bottom:8px;font-weight:700;">Google Preview</div>
+              <div style="font-size:14px;color:#1a0dab;margin-bottom:2px;">Rose Garden Floral Shirt | Karya Clothing UK &amp; India</div>
+              <div style="font-size:11px;color:#006621;margin-bottom:4px;">karya.com/products/rose-garden-floral-shirt</div>
+              <div style="font-size:12px;color:#545454;line-height:1.5;">Shop the Rose Garden Floral Shirt from Karya — breathable cotton voile, feminine design, available in UK &amp; India. Free shipping over £100.</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT: Sidebar -->
+        <div>
+
+          <!-- Completion progress -->
+          <div class="sidebar-card">
+            <div class="sidebar-card-title">Form Completion</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:85%"></div></div>
+            <div class="form-complete-pct">85% complete — almost ready to publish!</div>
+          </div>
+
+          <!-- Save / Publish -->
+          <div class="sidebar-card">
+            <div class="sidebar-card-title">Publish Settings</div>
+            <div class="form-field">
+              <label class="form-label">Status</label>
+              <div class="status-toggle">
+                <div class="status-opt active">✓ Active</div>
+                <div class="status-opt">Draft</div>
+              </div>
+            </div>
+            <div class="form-field">
+              <label class="form-label">Schedule Publish</label>
+              <input class="form-input" type="datetime-local" value="2026-05-01T09:00"/>
+              <div class="form-hint">Leave blank to publish immediately</div>
+            </div>
+            <div class="form-field">
+              <label class="form-label">Sales Channels</label>
+              <div class="channel-opt"><input type="checkbox" checked/><label>Online Store</label></div>
+              <div class="channel-opt"><input type="checkbox" checked/><label>Mobile App</label></div>
+              <div class="channel-opt"><input type="checkbox"/><label>Instagram Shopping</label></div>
+            </div>
+            <div class="save-btn-row">
+              <button class="save-btn save-publish" onclick="showToast('🎉 Product published! Now live on Karya store.')">Publish Now</button>
+              <button class="save-btn save-preview" onclick="showToast('Opening preview in new tab…')">Preview on Site ↗</button>
+              <button class="save-btn save-draft" onclick="showToast('Saved as draft. Not visible to customers yet.')">Save as Draft</button>
+            </div>
+          </div>
+
+          <!-- Tags -->
+          <div class="sidebar-card">
+            <div class="sidebar-card-title">Product Tags</div>
+            <div class="tag-wrap">
+              <div class="tag-item">floral <span>×</span></div>
+              <div class="tag-item">rose <span>×</span></div>
+              <div class="tag-item">casual <span>×</span></div>
+              <div class="tag-item">spring-2026 <span>×</span></div>
+              <div class="tag-item">cotton <span>×</span></div>
+            </div>
+            <div class="add-variant-row">
+              <input class="variant-input" placeholder="Add tag…" type="text"/>
+              <button class="variant-add-btn" onclick="showToast('Tag added!')">+</button>
+            </div>
+            <div class="form-hint" style="margin-top:8px;">Tags help with search and automated collections</div>
+          </div>
+
+          <!-- Shipping weight -->
+          <div class="sidebar-card">
+            <div class="sidebar-card-title">Shipping Details</div>
+            <div class="form-field">
+              <label class="form-label">Weight (grams)</label>
+              <input class="form-input" type="number" value="280" placeholder="e.g. 280"/>
+              <div class="form-hint">Used to calculate shipping cost automatically</div>
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label class="form-label">UK Shipping</label>
+                <select class="form-select"><option>Auto (free over £100)</option><option>Standard only</option><option>Express only</option></select>
+              </div>
+              <div class="form-field">
+                <label class="form-label">India Shipping</label>
+                <select class="form-select"><option>Auto (free over ₹2500)</option><option>Standard only</option></select>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+// Page navigation
+function showPage(name, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const page = document.getElementById('page-' + name);
+  if (page) page.classList.add('active');
+
+  document.querySelectorAll('.demo-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+
+  window.scrollTo(0, 0);
+}
+
+function getDemoBtn(name) {
+  const map = {
+    'home': 0, 'shop': 1, 'pdp': 2, 'cart': 3,
+    'admin-dash': 4, 'admin-products': 5, 'admin-add': 6
+  };
+  return document.querySelectorAll('.demo-btn')[map[name]];
+}
+
+// Toast notifications
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  const m = document.getElementById('toast-msg');
+  m.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// PDP interactions
+function changePdpImg(cls, flower, thumbEl) {
+  const main = document.getElementById('pdp-main-img');
+  main.className = 'pdp-main-img ' + cls;
+  main.textContent = flower;
+  document.querySelectorAll('.pdp-thumb').forEach(t => t.classList.remove('active'));
+  thumbEl.classList.add('active');
+}
+
+function selectColor(el, name) {
+  document.querySelectorAll('.pdp-color').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('pdp-color-name').textContent = name;
+}
+
+function selectSize(el) {
+  if (el.classList.contains('oos')) return;
+  document.querySelectorAll('.pdp-size').forEach(s => s.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+let qty = 1;
+function changeQty(d) {
+  qty = Math.max(1, Math.min(10, qty + d));
+  document.getElementById('pdp-qty').textContent = qty;
+}
+
+// PDP tabs
+function switchPdpTab(idx, btn) {
+  document.querySelectorAll('.pdp-tab-content').forEach((t,i) => t.classList.toggle('active', i === idx));
+  document.querySelectorAll('.pdp-tab-btn').forEach((b,i) => b.classList.toggle('active', i === idx));
+}
+
+// Cart promo code
+function applyPromo() {
+  const input = document.getElementById('promo-input').value.trim().toUpperCase();
+  const success = document.getElementById('promo-success');
+  const discountLine = document.getElementById('discount-line');
+  const total = document.getElementById('cart-total');
+  if (input === 'WELCOME10') {
+    success.style.display = 'block';
+    discountLine.style.display = 'flex';
+    total.textContent = '£710.10';
+    showToast('Promo code WELCOME10 applied! Saving £78.90');
+  } else {
+    showToast('Invalid promo code. Try WELCOME10');
+  }
+}
+
+// Color swatches (shop page interaction)
+document.querySelectorAll('.color-swatch').forEach(sw => {
+  sw.addEventListener('click', function() {
+    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// Size chips (shop page)
+document.querySelectorAll('.size-chip').forEach(chip => {
+  chip.addEventListener('click', function() {
+    document.querySelectorAll('.size-chip').forEach(c => c.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
